@@ -9,30 +9,43 @@ import Map from './components/Map';
 
 const App = () => {
   const [places, setPlaces] = useState([]);
-
+  const [childClicked, setChildClicked] = useState(null);
   const [coords, setCoords] = useState({});
-  const [bounds, setBounds] = useState(null);
+  const [bounds, setBounds] = useState({});
 
   useEffect(() => {
-    getPlacesData()
-      .then((data) => {
-        console.log(data)
-        setPlaces(data)
-      })
+    navigator.geolocation.getCurrentPosition(({coords: {latitude, longitude}}) => {
+      setCoords({lat: latitude, lng: longitude});
+    });
   }, []);
+
+  useEffect(() => {
+    if (!bounds) return;
+    getPlacesData(bounds.sw, bounds.ne)
+      .then((data) => {
+        setPlaces(data);
+      })
+  }, [coords, bounds]
+  );
+
   return (
     <>
       <CssBaseline />
       <Header />
       <Grid container spacing={3} style={{ width: '100%' }}>
         <Grid item xs={12} md={4}>
-            <List/>
+            <List 
+            places={places}
+            childClicked={childClicked}
+            />
         </Grid>
         <Grid item xs={12} md={8}>
           <Map
           setCoords={setCoords}
           setBounds={setBounds}
           coords={coords}
+          places={places}
+          setChildClicked={setChildClicked}
           />
         </Grid>
       </Grid>
