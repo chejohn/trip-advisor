@@ -7,3 +7,7 @@ User can see local places filtered by place type (i.e. restaurants, hotels, and 
 * google-map-react and material-ui libraries (import of library's components)
 * material-ui styles
 
+# Link To Site
+
+https://trip-advisor-cj.netlify.app/
+
